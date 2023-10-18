@@ -2,9 +2,9 @@
 
 import Item from "./item";
 import { useState } from "react";
-import Items from "./items.json";
 
-export default function ItemList() {
+export default function ItemList({ items }) {
+  const Items = items;
   const [sortBy, setSortBy] = useState("name");
 
   const renderButton = (buttonName, sortName) => {
