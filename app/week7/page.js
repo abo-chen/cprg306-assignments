@@ -11,7 +11,6 @@ export default function Page() {
   const [goods, setGoods] = useState("");
   const [mealIdeas, setMealIdeas] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState(null);
-  const [ingredients, setIngredients] = useState([]);
 
   const handleItemClicked = (itemName) => {
     const match = itemName.match(
@@ -47,27 +46,7 @@ export default function Page() {
     fetchData();
   }, [goods]);
 
-  useEffect(() => {
-    if (selectedMeal === null) return;
-
-    const fetchMealDetails = async () => {
-      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${selectedMeal}`);
-      const data = await response.json();
-      const mealDetails = data.meals[0];
-
-      const ingredientsList = [];
-
-      for (let i = 1; i <= 20; i++) {
-        if (mealDetails[`strIngredient${i}`]) {
-          ingredientsList.push(mealDetails[`strIngredient${i}`]+ " " + mealDetails[`strMeasure${i}`]);
-        }
-      }
-
-      setIngredients(ingredientsList);
-    };
-
-    fetchMealDetails();
-  }, [selectedMeal]);
+  
 
   function MealIdeas({ mealIdeas, goods }) {
     let mealInfo;
@@ -81,7 +60,12 @@ export default function Page() {
           <h2>Meal Ideas</h2>
           <div>{mealInfo}</div>
           {mealIdeas.map((meal) => (
-            <MealIdea key={meal.idMeal} meal={meal} onMealSelected={handleMealSelected}/>
+            <MealIdea
+              key={meal.idMeal}
+              meal={meal}
+              isSelected={selectedMeal === meal.idMeal}
+              onMealSelected={handleMealSelected}
+            />
           ))}
         </div>
       );
@@ -105,16 +89,6 @@ export default function Page() {
         </div>
         <div className="flex-1 max-w-sm m-2">
           {MealIdeas({ mealIdeas, goods })}
-          {ingredients.length > 0 && (
-          <div className="ingredients-list">
-            <h3>Ingredients:</h3>
-            <ul>
-              {ingredients.map((ingredient, index) => (
-                <li key={index}>{ingredient}</li>
-              ))}
-            </ul>
-          </div>
-        )}
         </div>
       </div>
     </main>
