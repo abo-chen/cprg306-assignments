@@ -8,27 +8,34 @@ import MealIdea from "./MealIdea";
 
 export default function Page() {
   const [items, setItems] = useState(itemsData);
-  const [food, setFood] = useState("");
+  const [goods, setGoods] = useState("");
   const [mealIdeas, setMealIdeas] = useState([]);
+  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [ingredients, setIngredients] = useState([]);
 
   const handleItemClicked = (itemName) => {
     const match = itemName.match(
       /^(.*?)(,.*?|[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}]+)$/u
     );
     const extractedName = match ? match[1].trim() : null;
-    setFood(extractedName);
+    setGoods(extractedName);
   };
 
+  function handleMealSelected(mealId) {
+    setSelectedMeal(mealId);
+    console.log(selectedMeal);
+  }
+
   useEffect(() => {
-    if (food === "") {
+    if (goods === "") {
       return; // no need to fetch
     }
 
     const fetchData = async () => {
-      //console.log(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(food)}`);
+      //console.log(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(goods)}`);
       const response = await fetch(
         `https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(
-          food
+          goods
         )}`
       );
       const data = await response.json();
@@ -38,16 +45,43 @@ export default function Page() {
     };
 
     fetchData();
-  }, [food]);
+  }, [goods]);
 
-  function MealIdeas({ mealIdeas }) {
-    if (food !== "") {
+  useEffect(() => {
+    if (selectedMeal === null) return;
+
+    const fetchMealDetails = async () => {
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${selectedMeal}`);
+      const data = await response.json();
+      const mealDetails = data.meals[0];
+
+      const ingredientsList = [];
+
+      for (let i = 1; i <= 20; i++) {
+        if (mealDetails[`strIngredient${i}`]) {
+          ingredientsList.push(mealDetails[`strIngredient${i}`]+ " " + mealDetails[`strMeasure${i}`]);
+        }
+      }
+
+      setIngredients(ingredientsList);
+    };
+
+    fetchMealDetails();
+  }, [selectedMeal]);
+
+  function MealIdeas({ mealIdeas, goods }) {
+    let mealInfo;
+    if (mealIdeas.length > 0)
+      mealInfo = "Here are some meal ideas using chicken breasts:";
+    else mealInfo = "No meal ideas found for " + goods + ". ";
+
+    if (goods !== "") {
       return (
         <div className="meal-ideas">
           <h2>Meal Ideas</h2>
-          <div>Here are some meal ideas using chicken breasts:</div>
+          <div>{mealInfo}</div>
           {mealIdeas.map((meal) => (
-            <MealIdea key={meal.idMeal} meal={meal} />
+            <MealIdea key={meal.idMeal} meal={meal} onMealSelected={handleMealSelected}/>
           ))}
         </div>
       );
@@ -70,7 +104,17 @@ export default function Page() {
           <ItemList items={items} onItemClicked={handleItemClicked} />
         </div>
         <div className="flex-1 max-w-sm m-2">
-          {MealIdeas({ mealIdeas })}
+          {MealIdeas({ mealIdeas, goods })}
+          {ingredients.length > 0 && (
+          <div className="ingredients-list">
+            <h3>Ingredients:</h3>
+            <ul>
+              {ingredients.map((ingredient, index) => (
+                <li key={index}>{ingredient}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         </div>
       </div>
     </main>
