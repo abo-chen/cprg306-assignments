@@ -49,7 +49,7 @@ export default function ItemList({ items , onItemClicked}) {
       }
       return accumulator;
     }, {});
-    console.log(groupedItems);
+    //console.log(groupedItems);
     //const categories = [...new Set(Items.map(item => item.category))];
     //console.log(categories);
 

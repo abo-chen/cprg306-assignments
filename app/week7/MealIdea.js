@@ -4,7 +4,7 @@ import { useState } from "react";
 function MealIdea({ meal, isSelected, onMealSelected }) {
   const [ingredients, setIngredients] = useState([]);
   const handleClick = async () => {
-    // 
+    //
     if (isSelected) {
       onMealSelected(null);
       setIngredients([]);
@@ -27,7 +27,7 @@ function MealIdea({ meal, isSelected, onMealSelected }) {
     }
 
     setIngredients(ingredientsList);
-    onMealSelected(meal.idMeal); // 当前meal已被选中
+    onMealSelected(meal.idMeal); // 
   };
 
   //console.log(meal);
