@@ -4,12 +4,12 @@ import ItemList from "./item-list";
 import NewItem from "./new-item";
 import itemsData from "./items.json";
 import { useState, useEffect } from "react";
-import MealIdea from "./MealIdea";
+import MealIdeas from "./meal-ideas";
 
 export default function Page() {
   const [items, setItems] = useState(itemsData);
   const [goods, setGoods] = useState("");
-  const [mealIdeas, setMealIdeas] = useState([]);  
+  const [mealIdeas, setMealIdeas] = useState([]);
   const [mealInfo, setMealInfo] = useState("");
   const [selectedMeal, setSelectedMeal] = useState(null);
 
@@ -50,27 +50,7 @@ export default function Page() {
     fetchData();
   }, [goods]);
 
-  
-
-  function MealIdeas({ ideas=[], goods, selectedMealVal, mealText, onMealSelectedFunc }) {
-    if (goods !== "") {
-      return (
-        <div className="meal-ideas">
-          <h2>Meal Ideas</h2>
-          <div>{mealText}</div>
-          {ideas.map((meal) => (
-            <MealIdea
-              key={meal.idMeal}
-              meal={meal}
-              isSelected={selectedMealVal === meal.idMeal}
-              onMealSelected={onMealSelectedFunc}
-            />
-          ))}
-        </div>
-      );
-    }
-  }
-
+  //add item
   function handleAddItem(newItem) {
     alert(
       `Added item: ${newItem.name}, quantity: ${newItem.quantity}, category: ${newItem.category}`
@@ -87,8 +67,13 @@ export default function Page() {
           <ItemList items={items} onItemClicked={handleItemClicked} />
         </div>
         <div className="flex-1 max-w-sm m-2">
-          { MealIdeas({ ideas:mealIdeas, goods, selectedMealVal:selectedMeal, mealText: mealInfo, onMealSelectedFunc:handleMealSelected }) }
-          { /*<MealIdeas ideas={mealIdeas} goods={goods} selectedMealVal={selectedMeal} mealText={mealInfo} onMealSelectedFunc={handleMealSelected} /> */}
+          <MealIdeas
+            ideas={mealIdeas}
+            goods={goods}
+            selectedMealVal={selectedMeal}
+            mealText={mealInfo}
+            onMealSelectedFunc={handleMealSelected}
+          />
         </div>
       </div>
     </main>
