@@ -33,13 +33,13 @@ function MealIdea({ meal, isSelected, onMealSelected }) {
   //console.log(meal);
   return (
     <div
-      className="m-1 p-1 border-x-cyan-600 border-2 hover:bg-blue-200"
+      className={`m-1 p-1 border-x-cyan-600 border-2 hover:bg-blue-200 ${isSelected ? 'bg-blue-300' : null}`}
       onClick={handleClick}
     >
       {/* <img src={meal.strMealThumb} alt={meal.strMeal} width="100" height="100" /> */}
       <p>{meal.strMeal}</p>
       {isSelected && ingredients.length > 0 && (
-        <div className="text-sm ml-4">
+        <div className="text-sm ml-4 font-mono italic">
           <h4>Ingredients:</h4>
           <ul className="ml-2">
             {ingredients.map((ingredient, index) => (

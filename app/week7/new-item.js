@@ -23,10 +23,10 @@ export default function NewItem({ onAddItem }) {
 
   return (
     <>
-    <h2 className="m-1">Add New Item</h2>
+    <h2 className="m-1">Add New Item:</h2>
     <form
       onSubmit={handleSubmit}
-      className="p-2 bg-slate-900 text-black max-w-sm w-full"
+      className="p-2 text-black max-w-sm w-full border-2 border-gray-400 rounded-lg"
     >
       <div className="mb-2">
         <input
