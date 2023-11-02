@@ -1,7 +1,7 @@
-import ShoppingList from "./Shopping-list";
+import ShoppingList from "./shopping-list";
 
 export const metadata = {
-    title: 'Week 7 - shopping list with meal ideas',
+    title: 'Week 8 - authenticated shopping list with meal ideas',
   }
 
 export default function Page() {
