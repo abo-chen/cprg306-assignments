@@ -22,7 +22,9 @@ const Page = () => {
             Welcome, {user?.displayName} ({user?.email})
           </p>
           <p>
-            <Link href="/week8/shopping-list">shopping-list</Link>
+            <Link className="hover:bg-blue-200" href="/week8/shopping-list">
+              shopping-list
+            </Link>
           </p>
           <button
             className="m-2 p-1 rounded bg-blue-500"
